@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <header>
+      <img src="logo_fpt.png" alt="" width="10%" class="text-center" />
+    </header>
+    <main>
+      <div class="container">
+        <div class="content">
+          <h2>Đăng nhập</h2>
+          <form action="">
+            <input type="text" id="username" placeholder="Tài khoản" />
+            <input type="text" id="password" placeholder="Mật khẩu" />
+            <input type="submit" value="Đăng nhập" class="btn-login" />
+          </form>
+        </div>
+      </div>
+    </main>
+    <footer></footer>
+    <script>
+      const btnLogin = document.querySelector(".btn-login");
+      // console.log(btnLogin);
+      const username = document.querySelector("#username");
+      const password = document.querySelector("#password");
+      btnLogin.addEventListener("click", function (event) {
+        event.preventDefault();
+        if (username.value == "") {
+          alert("Bạn chưa nhập tài khoản");
+          username.forcus();
+          return false;
+        } else if (password.value == "") {
+          alert("Bạn chưa nhập mật khảu");
+          password.forcus();
+          return false;
+        }
+        fetch("http://localhost:3000/users")
+          .then((res) => res.json())
+          .then((data) => {
+            if (checkLogin(data, username.value, password.value)) {
+              alert("Bạn đã đăng nhập thành công!");
+              window.location.href = "index.html";
+            } else {
+              alert("Tài khoản hoặc mật khẩu không chính xác");
+            }
+          })
+          .catch((err) => console.log(err));
+      });
+      const checkLogin = function (data, user, pass) {
+        return data.some((data) => {
+          return data.username == user && data.password == pass;
+        });
+      };
+    </script>
+  </body>
+</html>
